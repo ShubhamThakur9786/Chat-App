@@ -1,6 +1,10 @@
 import { useChatStore } from "../store/useChatStore";
+<<<<<<< HEAD
 import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
+=======
+import { useEffect, useRef } from "react";
+>>>>>>> 6d4bf3bfa311bceb5879979edd9f98842b1913e7
 
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
@@ -19,7 +23,10 @@ const ChatContainer = () => {
   } = useChatStore();
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
+<<<<<<< HEAD
   const [previewImage, setPreviewImage] = useState(null);
+=======
+>>>>>>> 6d4bf3bfa311bceb5879979edd9f98842b1913e7
 
   useEffect(() => {
     getMessages(selectedUser._id);
@@ -35,6 +42,7 @@ const ChatContainer = () => {
     }
   }, [messages]);
 
+<<<<<<< HEAD
   useEffect(() => {
     if (!previewImage) return;
 
@@ -46,6 +54,8 @@ const ChatContainer = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [previewImage]);
 
+=======
+>>>>>>> 6d4bf3bfa311bceb5879979edd9f98842b1913e7
   if (isMessagesLoading) {
     return (
       <div className="flex-1 flex flex-col overflow-auto">
@@ -86,6 +96,7 @@ const ChatContainer = () => {
             </div>
             <div className="chat-bubble flex flex-col">
               {message.image && (
+<<<<<<< HEAD
                 <button
                   type="button"
                   onClick={() => setPreviewImage(message.image)}
@@ -98,6 +109,13 @@ const ChatContainer = () => {
                     className="sm:max-w-[200px] rounded-md"
                   />
                 </button>
+=======
+                <img
+                  src={message.image}
+                  alt="Attachment"
+                  className="sm:max-w-[200px] rounded-md mb-2"
+                />
+>>>>>>> 6d4bf3bfa311bceb5879979edd9f98842b1913e7
               )}
               {message.text && <p>{message.text}</p>}
             </div>
@@ -106,6 +124,7 @@ const ChatContainer = () => {
       </div>
 
       <MessageInput />
+<<<<<<< HEAD
 
       {previewImage && (
         <div
@@ -131,6 +150,8 @@ const ChatContainer = () => {
           />
         </div>
       )}
+=======
+>>>>>>> 6d4bf3bfa311bceb5879979edd9f98842b1913e7
     </div>
   );
 };

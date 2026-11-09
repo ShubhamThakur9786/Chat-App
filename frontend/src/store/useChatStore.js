@@ -39,6 +39,7 @@ export const useChatStore = create((set, get) => ({
       const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
       set({ messages: [...messages, res.data] });
     } catch (error) {
+<<<<<<< HEAD
       const errorMessage =
         error.response?.status === 413
           ? "Image is too large to send. Please choose a smaller image."
@@ -47,6 +48,9 @@ export const useChatStore = create((set, get) => ({
             "Failed to send message. Please try again.";
       toast.error(errorMessage);
       throw error;
+=======
+      toast.error(error.response.data.message);
+>>>>>>> 6d4bf3bfa311bceb5879979edd9f98842b1913e7
     }
   },
 
