@@ -1,3 +1,4 @@
+
 import { create } from "zustand";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
@@ -16,7 +17,9 @@ export const useChatStore = create((set, get) => ({
       const res = await axiosInstance.get("/messages/users");
       set({ users: res.data });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(
+        error.response?.data?.message || "Failed to load users."
+      );
     } finally {
       set({ isUsersLoading: false });
     }
@@ -28,29 +31,39 @@ export const useChatStore = create((set, get) => ({
       const res = await axiosInstance.get(`/messages/${userId}`);
       set({ messages: res.data });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(
+        error.response?.data?.message || "Failed to load messages."
+      );
     } finally {
       set({ isMessagesLoading: false });
     }
   },
+
   sendMessage: async (messageData) => {
     const { selectedUser, messages } = get();
+
+    if (!selectedUser) {
+      toast.error("Please select a user first.");
+      return;
+    }
+
     try {
-      const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
+      const res = await axiosInstance.post(
+        `/messages/send/${selectedUser._id}`,
+        messageData
+      );
+
       set({ messages: [...messages, res.data] });
     } catch (error) {
-<<<<<<< HEAD
       const errorMessage =
         error.response?.status === 413
           ? "Image is too large to send. Please choose a smaller image."
           : error.response?.data?.message ||
             error.response?.data?.error ||
             "Failed to send message. Please try again.";
+
       toast.error(errorMessage);
       throw error;
-=======
-      toast.error(error.response.data.message);
->>>>>>> 6d4bf3bfa311bceb5879979edd9f98842b1913e7
     }
   },
 
@@ -59,9 +72,12 @@ export const useChatStore = create((set, get) => ({
     if (!selectedUser) return;
 
     const socket = useAuthStore.getState().socket;
+    if (!socket) return;
 
     socket.on("newMessage", (newMessage) => {
-      const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
+      const isMessageSentFromSelectedUser =
+        newMessage.senderId === selectedUser._id;
+
       if (!isMessageSentFromSelectedUser) return;
 
       set({
@@ -72,7 +88,9 @@ export const useChatStore = create((set, get) => ({
 
   unsubscribeFromMessages: () => {
     const socket = useAuthStore.getState().socket;
-    socket.off("newMessage");
+    if (socket) {
+      socket.off("newMessage");
+    }
   },
 
   setSelectedUser: (selectedUser) => set({ selectedUser }),

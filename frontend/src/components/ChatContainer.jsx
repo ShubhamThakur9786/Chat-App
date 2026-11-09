@@ -1,10 +1,7 @@
+
 import { useChatStore } from "../store/useChatStore";
-<<<<<<< HEAD
 import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
-=======
-import { useEffect, useRef } from "react";
->>>>>>> 6d4bf3bfa311bceb5879979edd9f98842b1913e7
 
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
@@ -21,41 +18,49 @@ const ChatContainer = () => {
     subscribeToMessages,
     unsubscribeFromMessages,
   } = useChatStore();
+
   const { authUser } = useAuthStore();
   const messageEndRef = useRef(null);
-<<<<<<< HEAD
   const [previewImage, setPreviewImage] = useState(null);
-=======
->>>>>>> 6d4bf3bfa311bceb5879979edd9f98842b1913e7
 
   useEffect(() => {
-    getMessages(selectedUser._id);
+    if (!selectedUser?._id) return;
 
+    getMessages(selectedUser._id);
     subscribeToMessages();
 
     return () => unsubscribeFromMessages();
-  }, [selectedUser._id, getMessages, subscribeToMessages, unsubscribeFromMessages]);
+  }, [
+    selectedUser?._id,
+    getMessages,
+    subscribeToMessages,
+    unsubscribeFromMessages,
+  ]);
 
   useEffect(() => {
     if (messageEndRef.current && messages) {
-      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+      messageEndRef.current.scrollIntoView({
+        behavior: "smooth",
+      });
     }
   }, [messages]);
 
-<<<<<<< HEAD
   useEffect(() => {
     if (!previewImage) return;
 
     const handleKeyDown = (event) => {
-      if (event.key === "Escape") setPreviewImage(null);
+      if (event.key === "Escape") {
+        setPreviewImage(null);
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [previewImage]);
 
-=======
->>>>>>> 6d4bf3bfa311bceb5879979edd9f98842b1913e7
   if (isMessagesLoading) {
     return (
       <div className="flex-1 flex flex-col overflow-auto">
@@ -74,10 +79,14 @@ const ChatContainer = () => {
         {messages.map((message) => (
           <div
             key={message._id}
-            className={`chat ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
+            className={`chat ${
+              message.senderId === authUser._id
+                ? "chat-end"
+                : "chat-start"
+            }`}
             ref={messageEndRef}
           >
-            <div className=" chat-image avatar">
+            <div className="chat-image avatar">
               <div className="size-10 rounded-full border">
                 <img
                   src={
@@ -89,14 +98,15 @@ const ChatContainer = () => {
                 />
               </div>
             </div>
+
             <div className="chat-header mb-1">
               <time className="text-xs opacity-50 ml-1">
                 {formatMessageTime(message.createdAt)}
               </time>
             </div>
+
             <div className="chat-bubble flex flex-col">
               {message.image && (
-<<<<<<< HEAD
                 <button
                   type="button"
                   onClick={() => setPreviewImage(message.image)}
@@ -109,22 +119,16 @@ const ChatContainer = () => {
                     className="sm:max-w-[200px] rounded-md"
                   />
                 </button>
-=======
-                <img
-                  src={message.image}
-                  alt="Attachment"
-                  className="sm:max-w-[200px] rounded-md mb-2"
-                />
->>>>>>> 6d4bf3bfa311bceb5879979edd9f98842b1913e7
               )}
+
               {message.text && <p>{message.text}</p>}
             </div>
           </div>
         ))}
+        <div ref={messageEndRef} />
       </div>
 
       <MessageInput />
-<<<<<<< HEAD
 
       {previewImage && (
         <div
@@ -142,6 +146,7 @@ const ChatContainer = () => {
           >
             <X />
           </button>
+
           <img
             src={previewImage}
             alt="Image preview"
@@ -150,9 +155,8 @@ const ChatContainer = () => {
           />
         </div>
       )}
-=======
->>>>>>> 6d4bf3bfa311bceb5879979edd9f98842b1913e7
     </div>
   );
 };
+
 export default ChatContainer;
