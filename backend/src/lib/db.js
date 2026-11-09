@@ -1,25 +1,22 @@
-// import mongoose from "mongoose";
-
-// export const connectDB = async () => {
-//   try {
-//     const conn = await mongoose.connect(process.env.MONGODB_URI);
-//     console.log(`MongoDB connected: ${conn.connection.host}`);
-//   } catch (error) {
-//     console.log("MongoDB connection error:", error);
-//   }
-// };
 
 import mongoose from "mongoose";
 
 export const connectDB = async () => {
   try {
-<<<<<<< HEAD
-    const conn = await mongoose.connect(process.env.MONGODB_URI);
-=======
-    const conn = await mongoose.connect(process.env.MONGODB_URL);
->>>>>>> 6d4bf3bfa311bceb5879979edd9f98842b1913e7
-    console.log("MongoDB connected successfully:", conn.connection.host);
+    const mongoURI = process.env.MONGODB_URI;
+
+    if (!mongoURI) {
+      throw new Error("MONGODB_URI is missing from environment variables");
+    }
+
+    const conn = await mongoose.connect(mongoURI);
+
+    console.log(
+      "MongoDB connected successfully:",
+      conn.connection.host
+    );
   } catch (error) {
-    console.log("MongoDB connection error:", error);
+    console.error("MongoDB connection error:", error.message);
+    process.exit(1);
   }
 };
